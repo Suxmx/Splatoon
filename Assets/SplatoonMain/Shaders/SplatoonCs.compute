@@ -1,0 +1,66 @@
+// Each #kernel tells which function to compile; you can have many kernels
+#pragma kernel CSMain
+Texture2D tokenTexture;
+
+float4 tokenOffset;
+int tokenWidth;
+int tokenHeight;
+int inputWidth;
+int inputHeight;
+float tokenScale;
+int curColorType;
+
+struct PixelInfo
+{
+    float4 MainColor;
+    int ColorType;
+};
+
+StructuredBuffer<float4> paintColor : register(t0);
+
+// float4 paintColor[5] =
+// {
+//     //White
+//     float4(1, 1, 1, 1),
+//     //Red
+//     float4(1, 0, 0, 1),
+//     //Green
+//     float4(0, 1, 0, 1),
+//     //Blue
+//     float4(0, 0, 1, 1),
+//     //Yellow
+//     float4(0, 1, 1, 1)
+// };
+
+RWStructuredBuffer<PixelInfo> pixelArray;
+RWStructuredBuffer<int> colorCntBuffer : register(u1);
+
+[numthreads(8,8,1)]
+void CSMain(uint3 id : SV_DispatchThreadID)
+{
+    float2 tokenUV = float2(id.x - tokenOffset.x, id.y - tokenOffset.y);
+    int index = id.x + id.y * inputWidth;
+    float4 mainPixel = pixelArray[index].MainColor;
+    if (tokenUV.x >= 0 && tokenUV.x < tokenWidth && tokenUV.y >= 0 && tokenUV.y < tokenHeight)
+    {
+        int colorType = pixelArray[index].ColorType;
+        //若贴图未采样到有效元素则跳过
+        // if(tokenTexture[tokenUV.xy].a<=0)
+        // {
+        //     pixelArray[index].MainColor = float4(tokenTexture[tokenUV.xy]);
+        //     return;
+        // }
+        float4 tokenPixel = paintColor[curColorType];
+        // float4 tokenPixel =float4(0,1,0,1);
+        float4 finalColor = tokenPixel + mainPixel * (1 - tokenPixel.a);
+        if (colorType != curColorType)
+        {
+            InterlockedAdd(colorCntBuffer[colorType],-1);
+            InterlockedAdd(colorCntBuffer[curColorType], 1);
+            pixelArray[index].ColorType = curColorType;
+        }
+        pixelArray[index].MainColor = finalColor;
+        
+    }
+
+}
