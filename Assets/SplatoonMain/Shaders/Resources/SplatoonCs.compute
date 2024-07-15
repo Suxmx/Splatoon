@@ -1,0 +1,45 @@
+#pragma kernel CSMain
+
+struct PixelInfo
+{
+    float4 MainColor;
+    int ColorType;
+};
+
+//在创建时设置
+int objPixelWidth;
+int objPixelHeight;
+//每帧设置
+Texture2D drawTexture;
+float4 drawMiddlePixelAddress;
+int drawWidth;
+int drawHeight;
+int drawColorType;
+
+
+StructuredBuffer<float4> ColorConstants : register(t0);
+RWStructuredBuffer<PixelInfo> pixelArray;
+RWStructuredBuffer<int> colorCountBuffer : register(u1);
+
+[numthreads(4,4,1)]
+void CSMain(uint3 id : SV_DispatchThreadID)
+{
+    float2 pixelAddress = float2(id.x - drawWidth / 2, id.y - drawHeight / 2) + drawMiddlePixelAddress.xy;
+    float2 uv = float2(1.0f * id.x / drawWidth, 1.0f * id.y / drawHeight);
+    // float dist = sqrt((uv.x - 0.5f) * (uv.x - 0.5f) + (uv.y - 0.5f) * (uv.y - 0.5f));
+    if (float4(drawTexture[uv]).a > 0.2f && pixelAddress.x >= 0 && pixelAddress.x < objPixelWidth && pixelAddress.y >= 0
+        && pixelAddress.y <
+        objPixelHeight)
+    {
+        int index = (int)(pixelAddress.y) * objPixelWidth;
+        index += pixelAddress.x;
+        int pixelColor = pixelArray[index].ColorType;
+        if (pixelColor != drawColorType)
+        {
+            InterlockedAdd(colorCountBuffer[pixelColor], -1);
+            InterlockedAdd(colorCountBuffer[drawColorType], 1);
+            pixelArray[index].ColorType = drawColorType;
+        }
+        pixelArray[index].MainColor = float4(1, 0, 0, 1);
+    }
+}

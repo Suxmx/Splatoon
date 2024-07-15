@@ -47,8 +47,10 @@
   <ItemGroup>
     <Compile Include="Assets\StainSystem\Demos\Demo2 - Platformer\Scripts\LevelReset.cs" />
     <Compile Include="Assets\StainSystem\Scripts\Splatter\Manager\MeshSplatterManager.cs" />
+    <Compile Include="Assets\SplatoonMain\Scripts\Painted\Base\PaintColor.cs" />
     <Compile Include="Assets\SplatoonMain\Scripts\Painter\Painter.cs" />
-    <Compile Include="Assets\SplatoonMain\Scripts\Painter\PaintColor.cs" />
+    <Compile Include="Assets\SplatoonMain\Scripts\Painted\PaintableProbuilder.cs" />
+    <Compile Include="Assets\SplatoonMain\Scripts\Painter\Painter_Old.cs" />
     <Compile Include="Assets\StainSystem\Demos\Demo4 - Top-Down\Scripts\UserCharacterController.cs" />
     <Compile Include="Assets\StainSystem\Demos\Demo2 - Platformer\Scripts\SplatterUserCharacterController.cs" />
     <Compile Include="Assets\StainSystem\Demos\Demo4 - Top-Down\Scripts\SplatterMouseShooter.cs" />
@@ -62,16 +64,21 @@
     <Compile Include="Assets\StainSystem\Scripts\Splatter\Bitmap\BitmapDraw.cs" />
     <Compile Include="Assets\StainSystem\Demos\Common\Scripts\MouseShooter.cs" />
     <Compile Include="Assets\SplatoonMain\Scripts\Painter\DynamicTextureObject.cs" />
+    <Compile Include="Assets\SplatoonMain\Scripts\Painted\Base\DrawData.cs" />
     <Compile Include="Assets\StainSystem\Demos\Demo7 - Balloon\Scripts\Balloon.cs" />
+    <Compile Include="Assets\SplatoonMain\Scripts\Utility.cs" />
     <Compile Include="Assets\StainSystem\Demos\Demo5 - Isometric\Scripts\UserCharacterController.cs" />
     <Compile Include="Assets\StainSystem\Scripts\Splatter\Branch\MeshBranch.cs" />
+    <Compile Include="Assets\SplatoonMain\Scripts\Painted\Base\PixelInfo.cs" />
     <Compile Include="Assets\StainSystem\Demos\Demo2 - Platformer\Scripts\GroundState.cs" />
     <Compile Include="Assets\StainSystem\Scripts\Utils\DebugHUD.cs" />
+    <Compile Include="Assets\SplatoonMain\Scripts\Painted\Base\PaintableObject.cs" />
     <Compile Include="Assets\StainSystem\Demos\Demo2 - Platformer\Scripts\UserCharacterController.cs" />
     <Compile Include="Assets\StainSystem\Scripts\Pool\PoolPreload.cs" />
     <Compile Include="Assets\StainSystem\Demos\Demo1 - Click\Scripts\PresetController.cs" />
     <Compile Include="Assets\StainSystem\Scripts\Splatter\Manager\AbstractSplatterManager.cs" />
     <Compile Include="Assets\StainSystem\Demos\Demo5 - Isometric\Scripts\SplatterUserCharacterController.cs" />
+    <Compile Include="Assets\SplatoonMain\Scripts\Painted\Base\DebugInfo.cs" />
     <Compile Include="Assets\StainSystem\Demos\Demo1 - Click\Scripts\ClickEmitter.cs" />
     <Compile Include="Assets\StainSystem\Scripts\Splatter\Branch\BitmapBranch.cs" />
     <Compile Include="Assets\StainSystem\Scripts\Splatter\SplatterSettings.cs" />
@@ -88,7 +95,7 @@
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF SSD.shader" />
     <None Include="Assets\StainSystem\Shaders\StandardSurface.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Surface-Mobile.shader" />
-    <None Include="Assets\SplatoonMain\Shaders\SplatoonCs.compute" />
+    <None Include="Assets\SplatoonMain\Shaders\Resources\SplatoonCs.compute" />
     <None Include="Assets\SplatoonMain\Shaders\DynamicSceneObject.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Surface.shader" />
     <None Include="Assets\TextMesh Pro\Sprites\EmojiOne Attribution.txt" />

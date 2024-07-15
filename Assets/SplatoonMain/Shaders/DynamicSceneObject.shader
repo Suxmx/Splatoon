@@ -44,8 +44,8 @@
             CBUFFER_START(UnityPerMaterial)
                 float4 _MainTex_ST;
                 float4 _SamplerOffset;
-                int inputWidth;
-                int inputHeight;
+                int objPixelWidth;
+                int objPixelHeight;
             CBUFFER_END
 
             TEXTURE2D(_MainTex);
@@ -82,18 +82,19 @@
             float4 frag(v2f i) : SV_Target
             {
                 // float4 col = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.uv);
-                float4 col = float4(1,0,0,1);
+                float4 col = float4(1,1,1,1);
                 //uv如何映射到装在一维数组里的二维图像
                 int x = 1;
-                x *= i.uv.x * inputWidth;
+                x *= i.uv.x * objPixelWidth;
                 int y = 1;
-                y *= i.uv.y * inputHeight;
-                int index = x + y * inputWidth;
+                y *= i.uv.y * objPixelHeight;
+                int index = x + y * objPixelWidth;
                 float4 bufferColor = pixelArray[index].MainColor;
-                bufferColor = pow(bufferColor, 0.45);
-                float4 finalcolor = col * (1 - bufferColor.a) + bufferColor * bufferColor.a;
-                // float4 finalcolor = bufferColor;
+                // bufferColor = pow(bufferColor, 0.45);
+                // float4 finalcolor = col * (1 - bufferColor.a) + bufferColor * bufferColor.a;
+                float4 finalcolor = bufferColor;
                 finalcolor.a = 1;
+                // return float4(i.uv.x,i.uv.y,0,1);
                 return finalcolor;
             }
             ENDHLSL

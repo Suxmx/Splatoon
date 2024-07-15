@@ -20,11 +20,7 @@ namespace Splatoon
         private int _KernelIndex;
         private Queue<DrawOnceInfo> _DrawInfoQueue = new Queue<DrawOnceInfo>();
 
-        public struct PixelInfo
-        {
-            public Vector4 MainColor;
-            public int ColorType;
-        }
+        
 
         private PixelInfo[] _PixelArray;
         private int[] _ColorCntBuffer = new int[5];
