@@ -10,20 +10,6 @@ namespace Splatoon
 
         private void Update()
         {
-            Ray ray = new Ray(transform.position, Vector2.down);
-            RaycastHit hit;
-            if (Physics.Raycast(ray, out hit, 100f))
-            {
-                var paintable = hit.collider.GetComponent<PaintableObject>();
-                if (paintable is null) return;
-                DrawData drawData = new DrawData();
-                drawData.Color = CurColor;
-                drawData.Position = new Vector2(hit.point.x, hit.point.z);
-                drawData.Scale = 1;
-                drawData.Texture = DrawTexture;
-                paintable.AddDrawData(drawData);
-            }
-
             if (Input.GetMouseButtonDown(1))
             {
                 int index = (int)CurColor;
@@ -35,6 +21,19 @@ namespace Splatoon
 
         private void FixedUpdate()
         {
+            Ray ray = new Ray(transform.position, Vector2.down);
+            RaycastHit hit;
+            if (Physics.Raycast(ray, out hit, 100f))
+            {
+                var paintable = hit.collider.GetComponent<PaintableObject>();
+                if (paintable is null) return;
+                DrawData drawData = new DrawData();
+                drawData.Color = CurColor;
+                drawData.Position = new Vector2(hit.point.x, hit.point.z);
+                drawData.Scale = 1f;
+                drawData.Texture = DrawTexture;
+                paintable.AddDrawData(drawData);
+            }
         }
     }
 }

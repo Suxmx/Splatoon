@@ -73,13 +73,14 @@ namespace Splatoon
         {
             ComputePixelCount();
             _Pixels = new PixelInfo[_PixelCount];
+            var black = new Vector4(0, 0, 0, 1);
             for (int i = 0; i < _Pixels.Length; i++)
             {
                 _Pixels[i].ColorType = (int)InitializeColor;
+                _Pixels[i].MainColor=black;
             }
 
             //Set Buffers
-            Debug.Log(Marshal.SizeOf(typeof(PixelInfo)));
             _PixelBuffer = new ComputeBuffer(_PixelCount, Marshal.SizeOf(typeof(PixelInfo)));
             _PixelBuffer.SetData(_Pixels);
 

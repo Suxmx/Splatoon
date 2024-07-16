@@ -8,4 +8,6 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/SplatoonMain/Scenes/SampleScene.unity
     guid: 99c9720ab356a0642a771bea13969a05
-  m_configObjects: {}
+  m_configObjects:
+    com.unity.addressableassets: {fileID: 11400000, guid: c6a214ef4c9925f4c85a6edcf8c71ede,
+      type: 2}

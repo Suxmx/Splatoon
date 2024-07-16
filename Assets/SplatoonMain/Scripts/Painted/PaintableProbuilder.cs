@@ -35,7 +35,7 @@ namespace Splatoon
             
             uv = (hitPos - _LeftBottom) / (_Size);
             // Debug.Log($"HitPos:{hitPos} HitUV:{uv}");
-            return true;
+            return true; 
         }
     }
 }

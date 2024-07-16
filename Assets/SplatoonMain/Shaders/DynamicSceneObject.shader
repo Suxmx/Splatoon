@@ -81,8 +81,7 @@
 
             float4 frag(v2f i) : SV_Target
             {
-                // float4 col = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.uv);
-                float4 col = float4(1,1,1,1);
+                float4 col = float4(0, 0, 1, 1);
                 //uv如何映射到装在一维数组里的二维图像
                 int x = 1;
                 x *= i.uv.x * objPixelWidth;
@@ -90,12 +89,10 @@
                 y *= i.uv.y * objPixelHeight;
                 int index = x + y * objPixelWidth;
                 float4 bufferColor = pixelArray[index].MainColor;
-                // bufferColor = pow(bufferColor, 0.45);
-                // float4 finalcolor = col * (1 - bufferColor.a) + bufferColor * bufferColor.a;
-                float4 finalcolor = bufferColor;
-                finalcolor.a = 1;
-                // return float4(i.uv.x,i.uv.y,0,1);
-                return finalcolor;
+                bufferColor = pow(bufferColor, 0.45);
+                // float totalfactor = step(1 - rect, saturate(rect * 0.5 + rect));
+                float4 finalcolor = bufferColor * bufferColor.a + (1 - bufferColor.a) * col;
+                return bufferColor;
             }
             ENDHLSL
         }
