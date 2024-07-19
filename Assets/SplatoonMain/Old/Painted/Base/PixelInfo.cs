@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Splatoon
+namespace SplatoonOld
 {
     public struct PixelInfo
     {

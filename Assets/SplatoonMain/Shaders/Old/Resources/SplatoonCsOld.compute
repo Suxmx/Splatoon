@@ -1,0 +1,81 @@
+#pragma kernel CSMain
+
+struct PixelInfo
+{
+    float4 MainColor;
+    int ColorType;
+};
+
+struct DebugInfo
+{
+    int idx;
+    int idy;
+    int pixelColor;
+    int drawColor;
+    int cnta;
+    int cntb;
+};
+
+//在创建时设置
+int objPixelWidth;
+int objPixelHeight;
+//每帧设置
+Texture2D drawTexture;
+float4 drawMiddlePixelAddress;
+int drawWidth;
+int drawHeight;
+int drawColorType;
+
+
+StructuredBuffer<float4> ColorConstants : register(t0);
+RWStructuredBuffer<DebugInfo> debugInfos;
+RWStructuredBuffer<PixelInfo> pixelArray;
+RWStructuredBuffer<int> colorCountBuffer : register(u1);
+
+[numthreads(4,4,1)]
+void CSMain(uint3 id : SV_DispatchThreadID)
+{
+    int2 pixelAddress = int2(id.x - drawWidth / 2, id.y - drawHeight / 2) + drawMiddlePixelAddress.xy;
+    int2 uv = int2(id.x, id.y);
+    float2 fuv = float2(1.0f * id.x / drawWidth, 1.0f * id.y / drawHeight);
+    int index = (pixelAddress.y) * objPixelWidth + pixelAddress.x;
+    if (pixelAddress.x >= 0 && pixelAddress.x < objPixelWidth && pixelAddress.y >= 0
+        && pixelAddress.y < objPixelHeight)
+    {
+        float4 sampleColor = float4(drawTexture[1 * (uv.xy)]);
+        float4 originalColor = pixelArray[index].MainColor;
+        if (sampleColor.a > 0.2f)
+        {
+            int pixelColor = pixelArray[index].ColorType;
+            if (pixelColor != drawColorType)
+            {
+                InterlockedAdd(colorCountBuffer[pixelColor], -1);
+                InterlockedAdd(colorCountBuffer[drawColorType], 1);
+                pixelArray[index].ColorType = drawColorType;
+            }
+            int debugIndex = id.y * drawWidth + id.x;
+            debugInfos[debugIndex].idx = id.x;
+            debugInfos[debugIndex].idy = id.y;
+            debugInfos[debugIndex].drawColor = drawColorType;
+            debugInfos[debugIndex].pixelColor = pixelColor;
+            debugInfos[debugIndex].cnta = colorCountBuffer[pixelColor];
+            debugInfos[debugIndex].cnta = colorCountBuffer[drawColorType];
+
+            float a = (0.5f - sqrt(pow(fuv.x - 0.5f, 2) + pow(fuv.y - 0.5f, 2))) / 0.5f;
+            a = a < 0 ? 0 : a;
+            if (a < 0.3f)
+            {
+                a = pow(a, 3);
+            }
+            else
+            {
+                a = 1;
+            }
+            sampleColor = ColorConstants[drawColorType];
+            sampleColor.a = a;
+            pixelArray[index].MainColor = sampleColor.a > originalColor.a || pixelColor != drawColorType
+                                              ? sampleColor
+                                              : originalColor;
+        }
+    }
+}

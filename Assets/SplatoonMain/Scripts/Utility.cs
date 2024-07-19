@@ -4,7 +4,7 @@ namespace Splatoon
 {
     public static class Utility
     {
-        public static int PaintColorCount() => System.Enum.GetValues(typeof(PaintColor)).Length;
+        public static int PaintColorCount => System.Enum.GetValues(typeof(PaintColor)).Length;
 
         public static Vector4[] ColorConstants = new[]
         {

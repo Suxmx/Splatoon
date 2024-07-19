@@ -4,7 +4,7 @@ using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-namespace Splatoon
+namespace SplatoonOld
 {
     public class DynamicTextureObject : MonoBehaviour
     {

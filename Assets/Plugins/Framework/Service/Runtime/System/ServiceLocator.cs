@@ -90,7 +90,7 @@ namespace Services
                     Type i = IService.GetSubInterfaceOfIService(type);
                     if (i != null)
                     {
-                        Debugger.LogWarning($"不存在登记类型为{type}的服务,转而尝试获取登记类型为{i}的服务", EMessageType.Service);
+                        // Debugger.LogWarning($"不存在登记类型为{type}的服务,转而尝试获取登记类型为{i}的服务", EMessageType.Service);
                         return TryGet(i, out ret);
                     }
                 }

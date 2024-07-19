@@ -1,9 +1,8 @@
 ﻿using UnityEngine;
-using UnityEngine.ProBuilder;
 
 namespace Splatoon
 {
-    public class PaintableProbuilder : PaintableObject
+    public class PaintableProbuilerObj : Paintable
     {
         private Renderer _Renderer;
 
@@ -20,8 +19,8 @@ namespace Splatoon
             _Size = new Vector2(bounds.x, bounds.z);
             _Rect = new Rect(_Middle, _Size);
             _LeftBottom = _Middle - _Size / 2.0f;
-            ObjPixelWidth = (int)(bounds.x * 256);
-            ObjPixelHeight = (int)(bounds.z * 256);
+            ObjPixelWidth = (int)(bounds.x * 32);
+            ObjPixelHeight = (int)(bounds.z * 32);
             _PixelCount = ObjPixelWidth * ObjPixelHeight;
         }
 
@@ -32,10 +31,10 @@ namespace Splatoon
             // {
             //     return false;
             // }
-            
+
             uv = (hitPos - _LeftBottom) / (_Size);
             // Debug.Log($"HitPos:{hitPos} HitUV:{uv}");
-            return true; 
+            return true;
         }
     }
 }

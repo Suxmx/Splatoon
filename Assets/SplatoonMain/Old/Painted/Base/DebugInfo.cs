@@ -1,20 +1,19 @@
 ﻿using UnityEngine;
 
-namespace Splatoon
+namespace SplatoonOld
 {
     public struct DebugInfo
     {
-        public int Index;
-        public int addx;
-        public int addy;
-        public int idx;
-        public int idy;
-        public float u;
-        public float v;
+        int idx;
+        int idy;
+        int pixelColor;
+        int drawColor;
+        int cnta;
+        int cntb;
     }
 
     public struct DebugInfo2
-    { 
+    {
         public float x;
         public float y;
         public float u;

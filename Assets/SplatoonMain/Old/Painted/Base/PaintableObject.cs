@@ -1,10 +1,14 @@
-﻿using System;
+﻿#define DEBUGPAINT
+
+using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using Services;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-namespace Splatoon
+
+namespace SplatoonOld
 {
     public abstract class PaintableObject : MonoBehaviour
     {
@@ -61,7 +65,12 @@ namespace Splatoon
             var csTemplate = Resources.Load<ComputeShader>("SplatoonCs");
             _ComputeShader = Instantiate(csTemplate);
             InitializeComputeShader();
-            _ColorCounts[(int)InitializeColor] = _PixelCount;
+        }
+
+        private void Start()
+        {
+            var colorManager = ServiceLocator.Get<ColorManager>();
+            colorManager.RegisterPaintable(this);
         }
 
         protected virtual void ComputePixelCount()
@@ -72,19 +81,20 @@ namespace Splatoon
         protected virtual void InitializeComputeShader()
         {
             ComputePixelCount();
+            _ColorCounts[(int)InitializeColor] = _PixelCount;
             _Pixels = new PixelInfo[_PixelCount];
-            var black = new Vector4(0, 0, 0, 1);
+            var color = Vector4.one;
             for (int i = 0; i < _Pixels.Length; i++)
             {
                 _Pixels[i].ColorType = (int)InitializeColor;
-                _Pixels[i].MainColor=black;
+                _Pixels[i].MainColor = color;
             }
 
             //Set Buffers
             _PixelBuffer = new ComputeBuffer(_PixelCount, Marshal.SizeOf(typeof(PixelInfo)));
             _PixelBuffer.SetData(_Pixels);
 
-            _ColorCountBuffer = new ComputeBuffer(Utility.PaintColorCount(), sizeof(int));
+            _ColorCountBuffer = new ComputeBuffer(Utility.PaintColorCount(), sizeof(int), ComputeBufferType.Raw);
             _ColorCountBuffer.SetData(_ColorCounts);
 
             _ColorConstantsBuffer = new ComputeBuffer(Utility.PaintColorCount(), 4 * sizeof(float));
@@ -99,9 +109,21 @@ namespace Splatoon
             _ComputeShader.SetInt(ObjPixelHeight_ShaderProp, ObjPixelHeight);
             _ComputeShader.SetBuffer(_KernelIndex, ColorConstants_ShaderProp, _ColorConstantsBuffer);
             _ComputeShader.SetBuffer(_KernelIndex, PixelArray_ShaderProp, _PixelBuffer);
-            _ComputeShader.SetBuffer(_KernelIndex, ColorCntBuffer_ShaderProp, _ColorConstantsBuffer);
+            _ComputeShader.SetBuffer(_KernelIndex, ColorCntBuffer_ShaderProp, _ColorCountBuffer);
         }
 
+        private void OnDestroy()
+        {
+#if DEBUGPAINT
+            _DebugBuffer?.Release();
+#endif
+
+            _PixelBuffer?.Release();
+            _ColorCountBuffer?.Release();
+            _ColorConstantsBuffer?.Release();
+        }
+
+#if DEBUGPAINT
         private DebugInfo[] _DebugInfos;
         private ComputeBuffer _DebugBuffer;
 
@@ -117,6 +139,7 @@ namespace Splatoon
             _DebugBuffer.GetData(_DebugInfos);
             Debug.Log(_DebugInfos);
         }
+#endif
 
         public void AddDrawData(DrawData data)
         {
@@ -142,16 +165,27 @@ namespace Splatoon
                 _ComputeShader.SetInt(DrawHeight_ShaderProp, height);
                 _ComputeShader.SetInt(DrawColorType_ShaderProp, (int)drawData.Color);
                 _ComputeShader.SetVector(DrawMiddlePixelAddress_ShaderProp, drawMiddlePixelAddress);
-                // SetDebugInfo(width, height);
+#if DEBUGPAINT
+                SetDebugInfo(width, height);
+#endif
+
                 _ComputeShader.Dispatch(_KernelIndex, width / 4, height / 4, 1);
-                // GetDebugInfo();
+#if DEBUGPAINT
+                GetDebugInfo();
+#endif
             }
 
             _ColorCountBuffer.GetData(_ColorCounts);
-            for (int i = 0; i < Utility.PaintColorCount(); i++)
-            {
-                // Debug.Log($"{(PaintColor)(i)}:{_ColorCounts[i]}");
-            }
+        }
+
+        public int[] GetColorCounts()
+        {
+            return _ColorCounts;
+        }
+
+        public int GetPixelCount()
+        {
+            return _PixelCount;
         }
 
         protected abstract bool TryHitPos2UV(Vector2 hitPos, out Vector2 uv);
