@@ -28,6 +28,7 @@ namespace Splatoon
 
         public void UpdateChildren()
         {
+            //子物体添加放到此处：被显示出后可以立刻更新位置，防止子物体瞬移
             while (_ChildrenToSpawn.Count > 0)
             {
                 var childTrans = _ChildrenToSpawn.Dequeue();

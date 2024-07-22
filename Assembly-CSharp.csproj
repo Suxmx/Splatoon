@@ -64,7 +64,6 @@
     <Compile Include="Assets\SplatoonMain\Old\Painted\PaintableProbuilder.cs" />
     <Compile Include="Assets\StainSystem\Demos\Demo4 - Top-Down\Scripts\Target.cs" />
     <Compile Include="Assets\StainSystem\Scripts\Splatter\SplatterUtils.cs" />
-    <Compile Include="Assets\SplatoonMain\Scripts\Player\Follow\SnakeBrain.cs" />
     <Compile Include="Assets\SplatoonMain\Scripts\Manager\IColorManager.cs" />
     <Compile Include="Assets\SplatoonMain\Old\Manager\IColorManager.cs" />
     <Compile Include="Assets\StainSystem\Demos\Demo2 - Platformer\Scripts\Pickup.cs" />
@@ -81,6 +80,7 @@
     <Compile Include="Assets\StainSystem\Scripts\Splatter\Branch\MeshBranch.cs" />
     <Compile Include="Assets\StainSystem\Demos\Demo2 - Platformer\Scripts\GroundState.cs" />
     <Compile Include="Assets\SplatoonMain\Old\Painter\Painter_Old.cs" />
+    <Compile Include="Assets\SplatoonMain\Scripts\Snake\SnakeBrain.cs" />
     <Compile Include="Assets\StainSystem\Scripts\Utils\DebugHUD.cs" />
     <Compile Include="Assets\StainSystem\Demos\Demo2 - Platformer\Scripts\UserCharacterController.cs" />
     <Compile Include="Assets\SplatoonMain\Old\Painted\Base\PixelInfo.cs" />

@@ -1,10 +1,12 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace Splatoon
 {
     public static class Utility
     {
         public static int PaintColorCount => System.Enum.GetValues(typeof(PaintColor)).Length;
+        public static Array PaintColorEnumerator => System.Enum.GetValues(typeof(PaintColor));
 
         public static Vector4[] ColorConstants = new[]
         {

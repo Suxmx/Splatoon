@@ -21,9 +21,11 @@ int objPixelHeight;
 //每帧设置
 Texture2D drawTexture;
 float4 drawMiddlePixelAddress;
-int drawWidth;
-int drawHeight;
+uint drawWidth;
+uint drawHeight;
 int drawColorType;
+//成功绘制的数量
+RWStructuredBuffer<int> drawCount;
 
 // RWStructuredBuffer<DebugInfo> debugInfos;
 RWStructuredBuffer<PixelInfo> pixelArray;
@@ -47,6 +49,7 @@ void CSMain(uint3 id : SV_DispatchThreadID)
             InterlockedAdd(colorCounts[pixelColor], -1);
             InterlockedAdd(colorCounts[drawColorType], 1);
             pixelArray[index].Color = drawColorType;
+            InterlockedAdd(drawCount[0], 1);
         }
     }
 }

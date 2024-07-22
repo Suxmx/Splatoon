@@ -8,14 +8,24 @@ namespace Splatoon
     public class ColorManager : Service, IColorManager
     {
         public List<TextMeshProUGUI> Texts;
-        public int Frame = 0;
 
         public List<Paintable> _Paintables = new();
         public long _PixelSum = 0;
         private long[] _ColorCounts = new long[Utility.PaintColorCount];
+        private Dictionary<PaintColor, int> _DrawCountDict = new();
+
+        protected override void Awake()
+        {
+            base.Awake();
+            foreach (PaintColor color in Utility.PaintColorEnumerator)
+            {
+                _DrawCountDict.Add(color,0);
+            }
+        }
 
         private void Update()
         {
+            ResetDrawCountDict();
             for (int i = 0; i < Utility.PaintColorCount; i++)
             {
                 _ColorCounts[i] = 0;
@@ -23,6 +33,11 @@ namespace Splatoon
 
             foreach (var paintable in _Paintables)
             {
+                paintable.LogicUpdate();
+                foreach (PaintColor color in Utility.PaintColorEnumerator)
+                {
+                    _DrawCountDict[color] += paintable.GetDrawCount(color);
+                }
                 var counts = paintable.GetColorCounts();
                 for (int i = 0; i < Utility.PaintColorCount; i++)
                 {
@@ -36,9 +51,12 @@ namespace Splatoon
             }
         }
 
-        private void FixedUpdate()
+        private void ResetDrawCountDict()
         {
-            Frame++;
+            foreach (PaintColor color in Utility.PaintColorEnumerator)
+            {
+                _DrawCountDict[color] = 0;
+            }
         }
 
         public void RegisterPaintable(Paintable obj)
@@ -46,5 +64,14 @@ namespace Splatoon
             _Paintables.Add(obj);
             _PixelSum += obj.GetPixelCount();
         }
+
+        /// <summary>
+        /// 放在LateUpdate中，获取某个颜色在该帧的涂色数量
+        /// </summary>
+        /// <param name="color"></param>
+        /// <returns></returns>
+        public int GetDrawCount(PaintColor color) => _DrawCountDict[color];
+
+        public long GetPixelCount() => _PixelSum;
     }
 }

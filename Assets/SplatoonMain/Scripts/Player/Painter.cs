@@ -1,4 +1,5 @@
 ﻿using System;
+using Services;
 using UnityEngine;
 
 namespace Splatoon
@@ -7,16 +8,13 @@ namespace Splatoon
     {
         public Texture DrawTexture;
         public PaintColor CurColor = PaintColor.Red;
+        private ColorManager _ColorManager;
+        private long _DrawCountSum=0;
+        private float _Scale = 1f;
 
-        private void Update()
+        private void Start()
         {
-            // if (Input.GetMouseButtonDown(1))
-            // {
-            //     int index = (int)CurColor;
-            //     CurColor = index + 1 == Enum.GetValues(typeof(PaintColor)).Length
-            //         ? (PaintColor)(1)
-            //         : (PaintColor)(index + 1);
-            // }
+            _ColorManager = ServiceLocator.Get<ColorManager>();
         }
 
         private void FixedUpdate()
@@ -30,10 +28,18 @@ namespace Splatoon
                 DrawData drawData = new DrawData();
                 drawData.Color = CurColor;
                 drawData.Position = new Vector2(hit.point.x, hit.point.z);
-                drawData.Scale = 1f;
+                drawData.Scale = _Scale;
                 // drawData.Texture = DrawTexture;
                 paintable.AddDrawData(drawData);
             }
         }
+
+        private void LateUpdate()
+        {
+            _DrawCountSum += _ColorManager.GetDrawCount(CurColor);
+        }
+
+        public long GetDrawCountSum() => _DrawCountSum;
+        public void SetScale(float scale) => _Scale = scale;
     }
 }

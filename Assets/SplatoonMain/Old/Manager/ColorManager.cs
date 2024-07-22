@@ -10,7 +10,6 @@ namespace SplatoonOld
     {
         public List<TextMeshProUGUI> Texts;
 
-
         public List<PaintableObject> _Paintables = new();
         public long _PixelSum = 0;
         private long[] _ColorCounts = new long[Utility.PaintColorCount()];
