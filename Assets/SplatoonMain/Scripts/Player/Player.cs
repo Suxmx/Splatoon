@@ -15,37 +15,42 @@ namespace Splatoon
         [Header("DEBUG")] [SerializeField] private int childCount;
         [SerializeField] private GameObject _Template;
         [SerializeField] private List<GameObject> _Children;
-
-        private Followable _Tail;
+        private SnakeBrain _SnakeBrain = new();
 
         private void Awake()
         {
             _Rigid = GetComponent<Rigidbody>();
-            _Children = new();
-            _Children.Add(gameObject);
-            var followable = gameObject.AddComponent<Followable>();
-            followable.Initialize(null, _Rigid);
-            _Tail = followable;
         }
 
         private void Update()
         {
             UpdateVelocity();
             UpdateRotation();
+
             if (Input.GetKeyDown(KeyCode.T))
             {
-                var obj = Instantiate(_Template);
-                _Children.Add(obj);
-                var followable = obj.AddComponent<Followable>();
-                followable.Initialize(_Tail,obj.GetComponent<Rigidbody>());
-                _Tail.SetChild(followable);
-                _Tail = followable;
+                for (int i = 0; i < 10; i++)
+                {
+                    var child = Instantiate(_Template);
+                    _SnakeBrain.AddChild(child.transform);
+                }
+            }
+
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                _Speed = 10;
+            }
+
+            if (Input.GetKeyUp(KeyCode.Space))
+            {
+                _Speed = 8;
             }
         }
 
         private void FixedUpdate()
         {
-           GetComponent<Followable>().LogicUpdate(null);
+            _SnakeBrain.RecordHeadFrameInfo(transform.position, transform.rotation);
+            _SnakeBrain.UpdateChildren();
         }
 
         private void UpdateRotation()
