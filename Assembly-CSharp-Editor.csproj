@@ -981,13 +981,29 @@
       <Project>{196f6626-3b18-b24c-7b9d-4dd27faeab1c}</Project>
       <Name>Assembly-CSharp-Editor-firstpass</Name>
     </ProjectReference>
+    <ProjectReference Include="CW.ShaderBundle.csproj">
+      <Project>{4be492c8-7550-0416-6ac1-67bccbbc6c57}</Project>
+      <Name>CW.ShaderBundle</Name>
+    </ProjectReference>
     <ProjectReference Include="XNode.csproj">
       <Project>{856ad07d-b194-ab15-cb0c-fcfe0df9e83e}</Project>
       <Name>XNode</Name>
     </ProjectReference>
+    <ProjectReference Include="PaintCore.csproj">
+      <Project>{1c214ba6-4ff1-1b45-7a11-d20ecf7da632}</Project>
+      <Name>PaintCore</Name>
+    </ProjectReference>
     <ProjectReference Include="XNodeEditor.csproj">
       <Project>{3794a7f9-c8c7-56d1-c474-adf0baefe409}</Project>
       <Name>XNodeEditor</Name>
+    </ProjectReference>
+    <ProjectReference Include="PaintIn3D.csproj">
+      <Project>{f16cbf53-1ced-e861-df01-bab2ea6636d1}</Project>
+      <Name>PaintIn3D</Name>
+    </ProjectReference>
+    <ProjectReference Include="CW.Common.csproj">
+      <Project>{48983dc4-b80f-6e82-0a6b-b42c20b52999}</Project>
+      <Name>CW.Common</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

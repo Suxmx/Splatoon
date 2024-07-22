@@ -22,7 +22,6 @@ namespace Splatoon
 
         // Shader Property Update PerFrame
         private static readonly int DrawCount_ShaderProp = Shader.PropertyToID("drawCount");
-        private static readonly int DrawTexture_ShaderProp = Shader.PropertyToID("drawTexture");
         private static readonly int DrawWidth_ShaderProp = Shader.PropertyToID("drawWidth");
         private static readonly int DrawHeight_ShaderProp = Shader.PropertyToID("drawHeight");
         private static readonly int DrawMiddlePixelAddress_ShaderProp = Shader.PropertyToID("drawMiddlePixelAddress");
@@ -135,10 +134,11 @@ namespace Splatoon
             while (DrawDatas.Count > 0)
             {
                 var drawData = DrawDatas.Dequeue();
-                if (!TryHitPos2UV(drawData.Position, out var uv))
-                {
-                    break;
-                }
+                // if (!TryHitPos2UV(drawData.Position, out var uv))
+                // {
+                //     break;
+                // }
+                var uv = drawData.UV;
 
                 // int width = (int)(drawData.Texture.width * drawData.Scale);
                 // int height = (int)(drawData.Texture.height * drawData.Scale);

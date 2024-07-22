@@ -20,23 +20,12 @@ namespace Splatoon
 
         private readonly float[] upgradeExp = new[] { 0.01f, 0.05f, 0.15f };
 
-        private Transform _TrailCacheParent;
-        // private const float _Level01 = 0.05f;
-        // private const float _Level12 = 0.15f;
-        // private const float _Level23 = 0.30f;
-
-        [Header("DEBUG")] [SerializeField] private int childCount;
-        [SerializeField] private GameObject _Template;
-        [SerializeField] private List<GameObject> _Children;
-        private Material _TrailMaterial;
-
+        [Header("DEBUG")] [SerializeField] private GameObject _Template;
 
         private void Awake()
         {
             _Rigid = GetComponent<Rigidbody>();
-            _Painter = GetComponent<Painter>();
-            _TrailCacheParent = GameObject.Find("TrailCache").transform;
-            _TrailMaterial = transform.Find("Trail").GetComponent<TrailRenderer>().material;
+            _Painter = GetComponentInChildren<Painter>();
         }
 
         private void Start()
@@ -66,7 +55,7 @@ namespace Splatoon
 
             if (Input.GetKeyUp(KeyCode.Space))
             {
-                _Speed = 8;
+                _Speed = 4;
             }
         }
 
@@ -76,6 +65,7 @@ namespace Splatoon
         private void CheckUpgrade()
         {
             float drawPercent = _Painter.GetDrawCountSum() * 1.0f / _ColorManager.GetPixelCount();
+            Debug.Log(drawPercent);
             if (_Level < upgradeExp.Length && drawPercent >= upgradeExp[_Level])
             {
                 _Level++;
@@ -84,34 +74,9 @@ namespace Splatoon
             }
         }
 
-        private void InitNewTrailRenderer(float width)
-        {
-            GameObject newTrailObj = new GameObject("Trail");
-            newTrailObj.transform.position = transform.position;
-            newTrailObj.transform.SetParent(transform);
-            newTrailObj.transform.Rotate(Vector3.right,90);
-            newTrailObj.transform.localPosition = new Vector3(0, -0.4f, 0);
-
-            var newTrail = newTrailObj.AddComponent<TrailRenderer>();
-            newTrail.time = float.MaxValue;
-            newTrail.minVertexDistance = 0.2f;
-            newTrail.startWidth = width;
-            newTrail.endWidth = width;
-            newTrail.numCapVertices = 3;
-            newTrail.numCornerVertices = 3;
-            newTrail.material = _TrailMaterial;
-            newTrail.alignment = LineAlignment.TransformZ;
-        }
-
         private void OnUpgrade()
         {
             AddChild();
-            //move old trail to trail cache
-            var trail = transform.Find("Trail");
-            trail.SetParent(_TrailCacheParent);
-            trail.GetComponent<TrailRenderer>().emitting = false;
-            //create new trail
-            InitNewTrailRenderer(1f + (_Level * 0.5f));
             _Painter.SetScale(1f + (_Level * 0.5f));
             // newTrail.material
         }
