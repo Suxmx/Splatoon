@@ -49,7 +49,7 @@ namespace Splatoon
 
         private void LateUpdate()
         {
-            _DrawCountSum += _ColorManager.GetDrawCount(CurColor);
+            _DrawCountSum += _ColorManager.GetUpgradeDrawCount(CurColor);
         }
 
         public long GetDrawCountSum() => _DrawCountSum;

@@ -64,8 +64,7 @@ namespace Splatoon
         /// </summary>
         private void CheckUpgrade()
         {
-            float drawPercent = _Painter.GetDrawCountSum() * 1.0f / _ColorManager.GetPixelCount();
-            Debug.Log(drawPercent);
+            float drawPercent = _Painter.GetDrawCountSum() * 1.0f / _ColorManager.GetUpgradePixelCount();
             if (_Level < upgradeExp.Length && drawPercent >= upgradeExp[_Level])
             {
                 _Level++;

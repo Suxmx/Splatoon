@@ -86,6 +86,7 @@
     <Compile Include="Assets\StainSystem\Demos\Demo2 - Platformer\Scripts\UserCharacterController.cs" />
     <Compile Include="Assets\SplatoonMain\Old\Painted\Base\PixelInfo.cs" />
     <Compile Include="Assets\StainSystem\Scripts\Pool\PoolPreload.cs" />
+    <Compile Include="Assets\SplatoonMain\Scripts\Paintable\MyColor.cs" />
     <Compile Include="Assets\SplatoonMain\Scripts\Paintable\Base\DrawData.cs" />
     <Compile Include="Assets\StainSystem\Demos\Demo1 - Click\Scripts\PresetController.cs" />
     <Compile Include="Assets\StainSystem\Scripts\Splatter\Manager\AbstractSplatterManager.cs" />

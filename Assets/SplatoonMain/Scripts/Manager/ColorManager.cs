@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Services;
 using TMPro;
+using UnityEngine;
 
 namespace Splatoon
 {
@@ -12,20 +13,34 @@ namespace Splatoon
         public List<Paintable> _Paintables = new();
         public long _PixelSum = 0;
         private long[] _ColorCounts = new long[Utility.PaintColorCount];
+
+        private Dictionary<PaintColor, MyColor> _CWColorDict = new();
         private Dictionary<PaintColor, int> _DrawCountDict = new();
 
         protected override void Awake()
         {
             base.Awake();
+
+
             foreach (PaintColor color in Utility.PaintColorEnumerator)
             {
-                _DrawCountDict.Add(color,0);
+                _DrawCountDict.Add(color, 0);
+            }
+        }
+
+        protected override void Start()
+        {
+            base.Start();
+            var myColors = GetComponentsInChildren<MyColor>();
+            foreach (var mycolor in myColors)
+            {
+                _CWColorDict.Add(mycolor.Color, mycolor);
             }
         }
 
         private void Update()
         {
-            ResetDrawCountDict();
+            ResetUpgradeDrawCountDict();
             for (int i = 0; i < Utility.PaintColorCount; i++)
             {
                 _ColorCounts[i] = 0;
@@ -38,6 +53,7 @@ namespace Splatoon
                 {
                     _DrawCountDict[color] += paintable.GetDrawCount(color);
                 }
+
                 var counts = paintable.GetColorCounts();
                 for (int i = 0; i < Utility.PaintColorCount; i++)
                 {
@@ -47,11 +63,11 @@ namespace Splatoon
 
             for (int i = 0; i < Utility.PaintColorCount; i++)
             {
-                Texts[i].text = $"{(PaintColor)(i)} : {_ColorCounts[i] * 100.0f / _PixelSum:0.0} %";
+                Texts[i].text = $"{(PaintColor)(i)} : {GetCWColorRatio((PaintColor)i) * 100:0.0} %";
             }
         }
 
-        private void ResetDrawCountDict()
+        private void ResetUpgradeDrawCountDict()
         {
             foreach (PaintColor color in Utility.PaintColorEnumerator)
             {
@@ -70,8 +86,23 @@ namespace Splatoon
         /// </summary>
         /// <param name="color"></param>
         /// <returns></returns>
-        public int GetDrawCount(PaintColor color) => _DrawCountDict[color];
+        public int GetUpgradeDrawCount(PaintColor color) => _DrawCountDict[color];
 
-        public long GetPixelCount() => _PixelSum;
+        public long GetUpgradePixelCount() => _PixelSum;
+
+        public int GetCWColorCount(PaintColor color)
+        {
+            if (!_CWColorDict.ContainsKey(color))
+                return 0;
+            return _CWColorDict[color].GetDrawCount();
+        }
+
+        public float GetCWColorRatio(PaintColor color)
+        {
+            if (!_CWColorDict.ContainsKey(color))
+                return 0;
+            Debug.Log(_CWColorDict[color].GetDrawRatio());
+            return _CWColorDict[color].GetDrawRatio();
+        }
     }
 }
